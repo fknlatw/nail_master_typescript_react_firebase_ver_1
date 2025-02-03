@@ -1,0 +1,21 @@
+.filters__form{
+    .filters__header{
+        margin-bottom: 0.5rem;
+        .filters__title{
+            display: inline-block;
+        }
+        .filters__button{
+            float: right;
+            svg{
+                display: block;
+                height: 0.7rem;
+            }
+        }
+    }
+    .filters__content{
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+}

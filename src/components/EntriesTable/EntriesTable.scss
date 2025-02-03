@@ -1,0 +1,28 @@
+.table{
+    border-collapse: collapse;
+    width: 100%;
+    position: relative;
+    
+    .table__head{
+        background: #b350fe;
+        color: #efdef8;
+
+        .table__row{
+
+            .table__data{
+                padding: 0.2rem;
+                border: 1px solid rgb(113, 84, 113);
+            }
+        }
+    }
+    .table__body{
+        background: #efdef8;
+        .table__row{
+
+            .table__data{
+                padding: 0.2rem;
+                border: 1px solid rgb(113, 84, 113);
+            }
+        }
+    }
+}

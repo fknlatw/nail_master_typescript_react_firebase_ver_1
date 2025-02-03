@@ -1,0 +1,79 @@
+@font-face{
+  font-family: Monitorica;
+  src: url("./font/Monitorica-Rg.ttf") format("truetype");
+}
+
+:root{
+  
+}
+
+*{
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: "Monitorica", sans-serif;
+  font-weight: 300;
+}
+
+button{
+  border: none;
+  cursor: pointer;
+  background: #b350fe;
+  padding: 0.25rem;
+  color: #efdef8;
+}
+
+body{
+  min-height: 100vh;
+  line-height: 1;
+}
+
+
+.app{
+  min-height: 100vh;
+  font-size: 1rem;
+}
+
+.container{
+  margin: 0 auto;
+  height: calc(100vh - 3.75rem);
+  max-width: 1200px;
+  overflow: hidden;
+}
+
+a{
+  text-decoration: none;
+}
+
+input{
+  padding: 0.2rem;
+  outline: none;
+  border: 1px solid #b350fe;
+  color: #a736fe;
+}
+
+@media (min-height: 720px){
+  .container{
+    height: 720px;
+  } 
+}
+
+@media (max-width: 660px){
+  .container{
+    min-height: calc(100vh - 3.75rem);
+    height: auto;
+  }
+  .app{
+    font-size: 0.8rem;
+  }
+  button{
+    font-size: 0.8rem;
+  }
+  tbody{
+    word-break: break-all;
+  }
+  td{
+    font-size: 0.7rem;
+  }
+}
+
