@@ -1,16 +1,25 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import Home from "./pages/Home/Home";
 import Login from './pages/Login/Login';
 import Register from './pages/Register/Register';
 import Header from "./components/Header/Header";
+import { PropsWithChildren, useContext } from "react";
+import { AuthContext } from "./context/AuthContext";
 
 const App = () => {
+  const {currentUser} = useContext(AuthContext)
+  // console.log(currentUser)
+  const RequireAuth = ({children}: PropsWithChildren) => {
+    return currentUser ? children : <Navigate to="/login" />
+  }
   return (
     <div className="app">
       <Header />
       <Routes>
         <Route 
-          element={<Home />} 
+          element={<RequireAuth>
+            <Home />
+          </RequireAuth>} 
           path="/" 
         />
 
