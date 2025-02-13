@@ -8,7 +8,7 @@ import { AuthContext } from "./context/AuthContext";
 
 const App = () => {
   const {currentUser} = useContext(AuthContext)
-  console.log(currentUser)
+  
   const RequireAuth = ({children}: PropsWithChildren) => {
     return currentUser ? children : <Navigate to="/login" />
   }

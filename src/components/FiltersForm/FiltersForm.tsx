@@ -1,9 +1,9 @@
-
+import {useState} from "react";
 import { MdFilterList } from 'react-icons/md';
 import "./FiltersForm.scss";
 
 const FiltersForm = () => {
-
+    const [isOpen, setIsOpen] = useState(false);
     return (
         <form className="filters__form">
             <div className="filters__header">
@@ -12,13 +12,14 @@ const FiltersForm = () => {
                 <button 
                     type="button" 
                     className="filters__button" 
+                    onClick={()=>setIsOpen(!isOpen)}
                 >
                     <MdFilterList  />
                 </button>
             </div>
 
               
-            <div className="filters__content">
+            {isOpen && <div className="filters__content">
                 <label htmlFor="">Дата</label>
                 <input type="text" />
                 <label htmlFor="">Тип</label>
@@ -30,7 +31,7 @@ const FiltersForm = () => {
                 <button>
                     Применить
                 </button>
-            </div>
+            </div>}
             
         </form>
     )

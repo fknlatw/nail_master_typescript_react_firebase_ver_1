@@ -1,9 +1,40 @@
 import "./InputForm.scss";
+import {useState, useContext} from "react";
+import { addDoc, collection, Timestamp } from "firebase/firestore";
+import { db } from "../../firebase";
+import { AuthContext } from "../../context/AuthContext";
+import { EntriesContext, EntriesContextType } from "../../context/EntriesContext";
+
 
 
 const InputForm = () => {
+    const [datetime, setDatetime] = useState("");
+    const [type, setType] = useState("");
+    const [clientName, setClientName] = useState("");
+    const [phone, setPhone] = useState("");
+
+    const {currentUser} = useContext(AuthContext);
+    const {fetchData} = useContext(EntriesContext) as EntriesContextType;
+
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        try {
+            await addDoc(collection(db, "entries"), {
+                entrieClientName: clientName,
+                entrieDatetime: Timestamp.fromDate(new Date(datetime)),
+                entriePhone: phone,
+                entrieType: type,
+                userId: currentUser.uid
+            });
+
+            fetchData();
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
     return (
-        <form className="form">
+        <form className="form" onSubmit={handleSubmit}>
             <h2>Добавить запись</h2>
             <label 
                 className="form__label" 
@@ -14,6 +45,8 @@ const InputForm = () => {
                 className="form__input"
                 name="entrieDatetime" 
                 type="datetime-local" 
+                value={datetime}
+                onChange={(e) => setDatetime(e.target.value)}
             />
 
             <label 
@@ -25,6 +58,8 @@ const InputForm = () => {
                 className="form__input"
                 name="entrieType" 
                 type="text" 
+                value={type}
+                onChange={(e)=>setType(e.target.value)}
             />
 
             <label 
@@ -36,6 +71,8 @@ const InputForm = () => {
                 className="form__input"
                 name="entrieClientName" 
                 type="text"  
+                value={clientName}
+                onChange={(e)=>setClientName(e.target.value)}
             />
 
             <label 
@@ -47,6 +84,8 @@ const InputForm = () => {
                 className="form__input"
                 name="entriePhone" 
                 type="text" 
+                value={phone}
+                onChange={(e)=>setPhone(e.target.value)}
             />
 
             <button 
