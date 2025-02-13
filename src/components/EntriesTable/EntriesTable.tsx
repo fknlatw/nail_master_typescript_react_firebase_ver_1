@@ -1,8 +1,16 @@
-
 import "./EntriesTable.scss";
+import { useState, useEffect, useContext} from "react";
+import { db } from "../../firebase";
+import { collection, getDocs, where, query } from "firebase/firestore";
+import { AuthContext } from "../../context/AuthContext";
+import { EntriesContext, EntriesContextType } from "../../context/EntriesContext";
+
 
 
 const EntriesTable = () => {
+    const {data} = useContext(EntriesContext) as EntriesContextType;
+    
+    
   return (
     <table className="table">
         <thead className="table__head">
@@ -14,7 +22,21 @@ const EntriesTable = () => {
             </tr>
         </thead>
         <tbody className="table__body">
-            <tr className="table__row">
+            {data.map((item: any, index: any) => {
+                
+                return(
+                    <tr key={index} className="table__row">
+                        <td className="table__data">
+                            {new Date(item.entrieDatetime.seconds * 1000).toLocaleString()}
+                        </td>
+                        <td className="table__data">{item.entrieType}</td>
+                        <td className="table__data">{item.entrieClientName}</td>
+                        <td className="table__data">{item.entriePhone}</td>
+                    </tr>
+                )
+            })}
+
+            {/* <tr className="table__row">
                 <td className="table__data">18-12-2025-13:00:00</td>
                 <td className="table__data">Маникюр</td>
                 <td className="table__data">Алиса</td>
@@ -31,10 +53,12 @@ const EntriesTable = () => {
                 <td className="table__data">Маникюр</td>
                 <td className="table__data">Елена</td>
                 <td className="table__data">8(908)792-92-31</td>
-            </tr>
+            </tr> */}
         </tbody>
     </table>
   )
 }
+
+
 
 export default EntriesTable;
