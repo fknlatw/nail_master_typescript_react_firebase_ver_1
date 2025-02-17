@@ -9,6 +9,16 @@
         flex-direction: column;
         gap: 0.5rem;
         margin: 0.5rem 0;
+        width: 200px;
+
+        h2{
+            text-align: center;
+        }
+        
+        .login__error{
+            color: red;
+            text-align: center;
+        }
     }
 
 }
