@@ -4,6 +4,7 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import {auth} from "../../firebase";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
+import { handleError } from "../../utils/handleError";
 
 const Login = () => {
   const [error, setError] = useState("");
@@ -14,22 +15,26 @@ const Login = () => {
 
   const navigate = useNavigate();
 
+  
+
   const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    if(email === "" || password === ""){
+      handleError("неверный логин или пароль", setError);
+      return;
+    }
 
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         const user = userCredential.user;
         dispatch({type: "LOGIN", payload: user});
-        navigate("/")
+        navigate("/");
       })
       .catch((err) => {
         const errorMessage = err.message;
-        setError(errorMessage);
-        return setTimeout(()=>{
-          setError("");
-        }, 3000)
-      })
+        handleError(errorMessage, setError);
+      });
   }
 
   return (

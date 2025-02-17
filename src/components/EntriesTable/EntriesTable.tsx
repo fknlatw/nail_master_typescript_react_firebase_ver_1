@@ -1,14 +1,12 @@
 import "./EntriesTable.scss";
-import { useState, useEffect, useContext} from "react";
-import { db } from "../../firebase";
-import { collection, getDocs, where, query } from "firebase/firestore";
-import { AuthContext } from "../../context/AuthContext";
+import { useContext} from "react";
 import { EntriesContext, EntriesContextType } from "../../context/EntriesContext";
 
 
 
 const EntriesTable = () => {
-    const {data} = useContext(EntriesContext) as EntriesContextType;
+    const {entries} = useContext(EntriesContext) as EntriesContextType;
+    
     
     
   return (
@@ -22,7 +20,7 @@ const EntriesTable = () => {
             </tr>
         </thead>
         <tbody className="table__body">
-            {data.map((item: any, index: any) => {
+            {entries?.map((item: any, index: any) => {
                 
                 return(
                     <tr key={index} className="table__row">
