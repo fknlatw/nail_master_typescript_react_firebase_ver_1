@@ -12,7 +12,7 @@
 
         .header__image{
             height: 3rem;
-
+            margin-right:0.5rem;
             @media (max-width: 660px){
                 height: 2.5rem;
             }
@@ -20,8 +20,9 @@
 
         .header__list{
             display: flex;
+            align-items: center;
             list-style: none;
-            gap: 1rem;
+            gap: 0.5rem;
 
             
             .list__item{
@@ -41,6 +42,20 @@
                 
             }
         }
+        .search__form{
+            display: flex;
 
+            .search__button{
+                svg{
+                    display: block;
+                }
+            }
+
+            .search__input{
+                width: 100%;
+
+
+            }
+        }
     }
 }
