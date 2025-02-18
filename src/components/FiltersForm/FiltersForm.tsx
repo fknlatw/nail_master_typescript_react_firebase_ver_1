@@ -2,7 +2,7 @@ import {useState, useContext, useEffect} from "react";
 import { MdFilterList } from 'react-icons/md';
 import "./FiltersForm.scss";
 import { EntriesContext, EntriesContextType } from "../../context/EntriesContext";
-import { handleError } from "../../utils/handleError";
+
 
 const FiltersForm = () => {
     const [isOpen, setIsOpen] = useState(false);
