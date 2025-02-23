@@ -5,10 +5,12 @@ import React, {useContext, useState} from "react";
 import { AuthContext } from "../../context/AuthContext";
 import { IoSearch } from "react-icons/io5";
 import { EntriesContext, EntriesContextType } from "../../context/EntriesContext";
+import { FiltersContext, FiltersContextType } from "../../context/FiltersContext";
 
 const Header = () => {
   const { currentUser, dispatch } = useContext(AuthContext);
   const {entries, setEntries, data} = useContext(EntriesContext) as EntriesContextType;
+  const {selectedfilters, filteredArray} = useContext(FiltersContext) as FiltersContextType;
   const [searchText, setSearchText] = useState("");
 
   const logOut = () => {
@@ -19,7 +21,16 @@ const Header = () => {
     e.preventDefault();
     
     if(searchText === ""){
-      setEntries(data);
+      
+      const {entrieDatetime, entrieType, entrieClientName} = selectedfilters;
+      if(entrieDatetime === "" && entrieType === "" && entrieClientName === ""){
+        setEntries(data);
+        return;
+      } else {
+        console.log(filteredArray)
+        setEntries(filteredArray);
+        return;
+      }
     }
 
     const searchResult = entries.filter((entrie:any)=>{
