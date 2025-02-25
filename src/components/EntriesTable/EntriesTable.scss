@@ -1,3 +1,12 @@
+.loading{
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .loading__text{
+        margin: 2rem;
+    }
+}
 .table{
     border-collapse: collapse;
     width: 100%;
@@ -18,10 +27,34 @@
     .table__body{
         background: #efdef8;
         .table__row{
+            position: relative;
+            border-right: 1px solid rgb(113, 84, 113);
 
             .table__data{
                 padding: 0.2rem;
                 border: 1px solid rgb(113, 84, 113);
+
+                .delete__entrie__button{
+                    display: none;
+                    position: absolute;
+                    top: 0;
+                    right: 0;
+                    bottom: 0;
+                    left: auto;
+                    z-index: 1;
+                    
+                    // svg{
+                        
+                    // }
+                }
+            }
+
+            
+            &:hover .table__data .delete__entrie__button{
+                
+                display: flex;
+                justify-content: center;
+                align-items: center;
             }
         }
     }
