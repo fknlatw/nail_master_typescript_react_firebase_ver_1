@@ -16,6 +16,8 @@ const InputForm = () => {
     const {currentUser} = useContext(AuthContext);
     const {fetchData} = useContext(EntriesContext) as EntriesContextType;
 
+    
+
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         try {
@@ -28,13 +30,23 @@ const InputForm = () => {
             });
 
             fetchData();
+
+            setDatetime("");
+            setType("");
+            setClientName("");
+            setPhone("")
+
         } catch (err) {
             console.log(err);
         }
     }
 
     return (
-        <form className="form" onSubmit={handleSubmit}>
+        <form 
+            className="form" 
+            onSubmit={handleSubmit}
+            
+        >
             <h2>Добавить запись</h2>
             <label 
                 className="form__label" 
@@ -42,6 +54,7 @@ const InputForm = () => {
             >Дата и время</label>
 
             <input 
+                required
                 className="form__input"
                 name="entrieDatetime" 
                 type="datetime-local" 
@@ -55,6 +68,7 @@ const InputForm = () => {
             >Тип</label>
 
             <input 
+                required
                 className="form__input"
                 name="entrieType" 
                 type="text" 
@@ -68,6 +82,7 @@ const InputForm = () => {
             >Имя клиента</label>
 
             <input 
+                required
                 className="form__input"
                 name="entrieClientName" 
                 type="text"  
@@ -81,6 +96,7 @@ const InputForm = () => {
             >Телефон клиента</label>
 
             <input 
+                required
                 className="form__input"
                 name="entriePhone" 
                 type="text" 

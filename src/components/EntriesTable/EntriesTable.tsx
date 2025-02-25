@@ -1,12 +1,20 @@
 import "./EntriesTable.scss";
 import { useContext} from "react";
 import { EntriesContext, EntriesContextType } from "../../context/EntriesContext";
+import { FaTrash } from "react-icons/fa";
 
 
 
 const EntriesTable = () => {
-    const {entries} = useContext(EntriesContext) as EntriesContextType;
+    const { entries, isLoading, deleteEntrie } = useContext(EntriesContext) as EntriesContextType;
     
+    if(isLoading){
+        return (
+            <div className="loading">
+                <h2 className="loading__text">Загрузка...</h2>
+            </div>
+        )
+    }
     
     
   return (
@@ -20,16 +28,24 @@ const EntriesTable = () => {
             </tr>
         </thead>
         <tbody className="table__body">
-            {entries?.map((item: any, index: any) => {
+            {entries?.map((item: any) => {
                 
                 return(
-                    <tr key={index} className="table__row">
+                    <tr key={item.entrieId} className="table__row">
                         <td className="table__data">
                             {new Date(item.entrieDatetime.seconds * 1000).toLocaleString()}
                         </td>
                         <td className="table__data">{item.entrieType}</td>
                         <td className="table__data">{item.entrieClientName}</td>
-                        <td className="table__data">{item.entriePhone}</td>
+                        <td className="table__data">{item.entriePhone}
+                            <button 
+                                onClick={()=>deleteEntrie(item.entrieId)}
+                                className="delete__entrie__button"
+                            >
+                                <FaTrash/>
+                            </button>
+                        </td>
+                        
                     </tr>
                 )
             })}
