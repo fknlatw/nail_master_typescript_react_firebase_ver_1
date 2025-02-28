@@ -20,7 +20,7 @@
 
             .table__data{
                 padding: 0.2rem;
-                border: 1px solid rgb(113, 84, 113);
+                border: 1.25px solid rgb(113, 84, 113);
             }
         }
     }
@@ -28,34 +28,46 @@
         background: #efdef8;
         .table__row{
             position: relative;
-            border-right: 1px solid rgb(113, 84, 113);
+            overflow: hidden;
+            // border-right: 2px solid rgb(113, 84, 113);
 
             .table__data{
                 padding: 0.2rem;
-                border: 1px solid rgb(113, 84, 113);
-
-                .delete__entrie__button{
-                    display: none;
-                    position: absolute;
-                    top: 0;
-                    right: 0;
-                    bottom: 0;
-                    left: auto;
-                    z-index: 1;
+                border: 1.25px solid rgb(113, 84, 113);
                     
-                    // svg{
-                        
-                    // }
+                
+                .data__buttons{
+                    display: flex;
+                    justify-content: flex-end;
+                    margin-top: 0.2rem;
+                    gap: 0.2rem;
+                    
+                    
+                    button{
+                        background-color: transparent;
+                        color:  #b350fe;
+                        &:hover{
+                            color: #fff;
+                            background-color: #b350fe;
+                        }
+                    }
+                    button svg{
+                        display: block;
+                        font-size: 0.9rem;
+                    }
+                    
                 }
+                
+                
             }
 
             
-            &:hover .table__data .delete__entrie__button{
-                
-                display: flex;
-                justify-content: center;
-                align-items: center;
-            }
+            // &:hover .table__data .data__buttons{
+            //     gap: 0.2rem;
+            //     display: flex;
+            //     justify-content: center;
+            //     align-items: center;
+            // }
         }
     }
 }

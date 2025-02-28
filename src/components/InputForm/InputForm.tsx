@@ -1,6 +1,6 @@
 import "./InputForm.scss";
-import {useState, useContext} from "react";
-import { addDoc, collection, Timestamp } from "firebase/firestore";
+import { useContext} from "react";
+import { addDoc, collection, Timestamp, updateDoc, doc } from "firebase/firestore";
 import { db } from "../../firebase";
 import { AuthContext } from "../../context/AuthContext";
 import { EntriesContext, EntriesContextType } from "../../context/EntriesContext";
@@ -8,33 +8,55 @@ import { EntriesContext, EntriesContextType } from "../../context/EntriesContext
 
 
 const InputForm = () => {
-    const [datetime, setDatetime] = useState("");
-    const [type, setType] = useState("");
-    const [clientName, setClientName] = useState("");
-    const [phone, setPhone] = useState("");
-
-    const {currentUser} = useContext(AuthContext);
-    const {fetchData} = useContext(EntriesContext) as EntriesContextType;
-
     
+
+    const {currentUser
+    } = useContext(AuthContext);
+    const {fetchData, datetime, setDatetime,
+        type, setType, clientName,
+        setClientName, phone, setPhone, 
+        isEditing, setIsEditing} = useContext(EntriesContext) as EntriesContextType;
+
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         try {
-            await addDoc(collection(db, "entries"), {
-                entrieClientName: clientName,
-                entrieDatetime: Timestamp.fromDate(new Date(datetime)),
-                entriePhone: phone,
-                entrieType: type,
-                userId: currentUser.uid
-            });
+            if(isEditing.status === true){
+                const { userId, entrieId } = isEditing.currentEntrie;
+                
+                // console.log({
+                //     userId: userId,
+                //     entrieId: entrieId,
+                //     entrieDatetime: Timestamp.fromDate(new Date(datetime)),
+                //     entrieType: type,
+                //     entrieClientName: clientName,
+                //     entriePhone: phone,
+                // })
+                await updateDoc(doc(db, "entries", entrieId), {
+                    userId: userId,
+                    entrieId: entrieId,
+                    entrieDatetime: Timestamp.fromDate(new Date(datetime)),
+                    entrieType: type,
+                    entrieClientName: clientName,
+                    entriePhone: phone,
+                });
+            }else{
+                await addDoc(collection(db, "entries"), {
+                    entrieClientName: clientName,
+                    entrieDatetime: Timestamp.fromDate(new Date(datetime)),
+                    entriePhone: phone,
+                    entrieType: type,
+                    userId: currentUser.uid
+                });
+            }
 
             fetchData();
 
             setDatetime("");
             setType("");
             setClientName("");
-            setPhone("")
+            setPhone("");
+            setIsEditing({currentEntrie: {}, status: false});
 
         } catch (err) {
             console.log(err);
@@ -107,7 +129,11 @@ const InputForm = () => {
             <button 
                 className="form__button" 
                 type="submit"
-            >Добавить запись</button>
+            >
+                {isEditing.status
+                ? "Редактировать запись" 
+                : "Добавить запись"}
+            </button>
 
         </form>
     );

@@ -2,11 +2,12 @@ import "./EntriesTable.scss";
 import { useContext} from "react";
 import { EntriesContext, EntriesContextType } from "../../context/EntriesContext";
 import { FaTrash } from "react-icons/fa";
+import { MdEdit } from "react-icons/md";
 
 
 
 const EntriesTable = () => {
-    const { entries, isLoading, deleteEntrie } = useContext(EntriesContext) as EntriesContextType;
+    const { entries, isLoading, deleteEntrie, editEntrie, isEditing } = useContext(EntriesContext) as EntriesContextType;
     
     if(isLoading){
         return (
@@ -38,12 +39,21 @@ const EntriesTable = () => {
                         <td className="table__data">{item.entrieType}</td>
                         <td className="table__data">{item.entrieClientName}</td>
                         <td className="table__data">{item.entriePhone}
-                            <button 
-                                onClick={()=>deleteEntrie(item.entrieId)}
-                                className="delete__entrie__button"
-                            >
-                                <FaTrash/>
-                            </button>
+                            
+                            {!isEditing.status && <div className="data__buttons">
+                                <button 
+                                    onClick={()=>deleteEntrie(item.entrieId)}
+                                    className="delete__entrie__button"
+                                >
+                                    <FaTrash/>
+                                </button>
+                                <button 
+                                    onClick={()=>editEntrie(item)}
+                                    className="edit__entrie__button"
+                                >
+                                    <MdEdit/>
+                                </button>
+                            </div>}
                         </td>
                         
                     </tr>
