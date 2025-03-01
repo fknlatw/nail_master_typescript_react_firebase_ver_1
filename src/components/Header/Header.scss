@@ -1,5 +1,5 @@
 .header{
-    background: #9d4edd;
+    background: var(--darker-orchid-color);
 
     .header__container{
         margin: 0 auto;
@@ -27,14 +27,14 @@
             
             .list__item{
                 .list__link{
-                    color: #fff;
+                    color: var(--white-color);
 
                     &.list__link--active{  
-                        color: #bc9ed4;
+                        color: var(--wisteria-color);
                     }
                 }
                 .logout__button{
-                    color: #fff;
+                    color: var(--white-color);
                     background-color: transparent;
                     padding: 0;
                     cursor: pointer;
@@ -62,7 +62,7 @@
             bottom: 0;
             right: 0;
             left: 0;
-            background-color: #fff;
+            background-color: var(--white-color);
             padding: 1rem 2rem 1rem 1rem;
             z-index: 2;
 

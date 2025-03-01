@@ -3,7 +3,6 @@
     align-items: center;
     justify-content: center;
 
-
     .register__form{
         display: flex;
         flex-direction: column;
@@ -16,7 +15,7 @@
         }
         
         .login__error{
-            color: red;
+            color: var(--red-color);
             text-align: center;
         }
     }

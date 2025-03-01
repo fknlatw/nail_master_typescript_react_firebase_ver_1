@@ -21,8 +21,8 @@
         select{
             padding: 0.2rem;
             outline: none;
-            border: 1px solid #b350fe;
-            color: #a736fe;
+            border: 1px solid var(--moderate-orchid-color);
+            color: var(--dark-orchid-color);
             background: transparent;
         }
     }

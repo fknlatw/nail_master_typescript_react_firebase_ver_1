@@ -2,8 +2,16 @@
   font-family: Monitorica;
   src: url("./font/Monitorica-Rg.ttf") format("truetype");
 }
-
-
+:root{
+  --moderate-orchid-color: #ba55d3; //#b350fe --> #ba55d3
+  --darker-orchid-color: #9d4edd;
+  --dark-orchid-color: #9932cc; //#a736fe --> #9932cc
+  --red-color: red;
+  --white-color: #ffffff;
+  --wisteria-color: #c9a0dc; //#bc9ed4 --> #c9a0dc
+  --lavender-color: #efdef8; //#efdef8 --> #e6e6fa
+  --graybrowncrimson-color: #735184; //rgb(113, 84, 113) --> #735184
+}
 
 *{
   padding: 0;
@@ -16,16 +24,15 @@
 button{
   border: none;
   cursor: pointer;
-  background: #b350fe;
+  background-color: var(--moderate-orchid-color);
   padding: 0.25rem;
-  color: #efdef8;
+  color: var(--lavender-color);
 }
 
 body{
   min-height: 100vh;
   line-height: 1;
 }
-
 
 .app{
   min-height: 100vh;
@@ -46,8 +53,8 @@ a{
 input{
   padding: 0.2rem;
   outline: none;
-  border: 1px solid #b350fe;
-  color: #a736fe;
+  border: 1px solid var(--moderate-orchid-color);
+  color: var(--dark-orchid-color);
 }
 
 @media (min-height: 720px){
