@@ -3,7 +3,7 @@ import {
   useEffect, useState 
 } from "react";
 import { AuthContext } from "./AuthContext";
-import { AuthContextType } from "../types/types";
+import { AuthContextType, Entrie, EntriesContextType } from "../types/types";
 import { db } from "../firebase";
 import { 
   collection, getDocs, query, 
@@ -11,21 +11,25 @@ import {
   updateDoc, Timestamp, 
   addDoc 
 } from "firebase/firestore";
-import { EntriesContextType } from "../types/types";
+
 
 
 export const EntriesContext = createContext<EntriesContextType | null>(null);
 
 const EntriesProvider = ({children}: PropsWithChildren) => {
-  const [data, setData] = useState([]);
-  const [entries, setEntries] = useState([]);
+  const [data, setData] = useState<Entrie[]>([]);
+  const [entries, setEntries] = useState<Entrie[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [datetime, setDatetime] = useState("");
+  const [datetime, setDatetime] = useState<string>("");
+  
   const [isEditing, setIsEditing] = useState({
     currentEntrie: {
       userId: "",
       entrieId: "",
-      entrieDatetime: "",
+      entrieDatetime: {
+        seconds: 0,
+        nanoseconds: 0
+      },
       entrieType: "",
       entrieClientName: "",
       entriePhone: "",
@@ -45,7 +49,7 @@ const EntriesProvider = ({children}: PropsWithChildren) => {
     fetchData();
   }
 
-  const editEntrie = (entrie: any) => {
+  const editEntrie = (entrie: Entrie) => {
     const date = new Date(entrie.entrieDatetime.seconds * 1000);
     date.setHours(date.getHours() + 6);
     const formattedDate = date.toISOString().slice(0, 16);
@@ -89,7 +93,10 @@ const EntriesProvider = ({children}: PropsWithChildren) => {
       setIsEditing({currentEntrie: {
         userId: "",
         entrieId: "",
-        entrieDatetime: "",
+        entrieDatetime: {
+          seconds: 0,
+          nanoseconds: 0
+        },
         entrieType: "",
         entrieClientName: "",
         entriePhone: ""

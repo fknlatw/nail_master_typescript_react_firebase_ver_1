@@ -1,39 +1,50 @@
+import { type UserInfo } from "firebase/auth"
+
 export type AuthContextType = {
-  currentUser: any,
-  error: any,
-  setError: any,
-  email: any,
-  setEmail: any,
-  password: any,
-  setPassword: any,
-  handleRegister: any,
-  handleLogin: any,
-  handleLogout: any
+  currentUser: UserInfo,
+  error: string,
+  setError: (error: string) => void,
+  email: string,
+  setEmail: (email: string) => void,
+  password: string,
+  setPassword: (password: string) => void,
+  handleRegister: (e: React.FormEvent<HTMLFormElement>) => void,
+  handleLogin: (e: React.FormEvent<HTMLFormElement>) => void,
+  handleLogout: () => void
 }
 
 export type EntriesContextType = {
-  data: Array<Entrie>,
+  data: Entrie[],
   fetchData: () => void,
   setData: (data: any) => void,
-  entries: any,
-  setEntries: (data: any) => void,
+  entries: Entrie[],
+  setEntries: (data: Entrie[]) => void,
   isLoading: boolean,
   deleteEntrie: (id: string) => void
-  editEntrie: (entrie: any) => void
-  datetime: any,
-  setDatetime: any,
-  type: any, 
-  setType: any,
-  clientName: any,
-  setClientName: any,
-  phone: any, 
-  setPhone: any,
-  isEditing: {currentEntrie: any, status: boolean},
-  setIsEditing: (isEditing:any) => void,
-  handleSearch: (e: React.FormEvent<HTMLFormElement>, selectedFilters: any, filteredArray: any) => void,
-  searchText: any,
-  setSearchText: any,
-  handleAddEdit: any
+  editEntrie: (entrie: Entrie) => void
+  datetime: string,
+  setDatetime: (datetime: string) => void,
+  type: string, 
+  setType: (type: string) => void,
+  clientName: string,
+  setClientName: (clientName: string) => void,
+  phone: string, 
+  setPhone: (phone: string) => void,
+  isEditing: IsEditing,
+  setIsEditing: (isEditing: IsEditing) => void,
+  handleSearch: (
+    e: React.FormEvent<HTMLFormElement>, 
+    selectedFilters: SelectedFilters, 
+    filteredArray: Entrie[]
+  ) => void,
+  searchText: string,
+  setSearchText: (searchText: string) => void,
+  handleAddEdit: (e: React.FormEvent<HTMLFormElement>) => void
+}
+
+export interface IsEditing{
+  currentEntrie: Entrie, 
+  status: boolean
 }
 
 export interface FiltersData{
@@ -43,7 +54,10 @@ export interface FiltersData{
 }
 
 export interface Entrie{
-  entrieDatetime: string,
+  entrieDatetime: {
+    seconds: number,
+    nanoseconds: number
+  },
   entrieType: string,
   entrieClientName: string,
   entriePhone: string,
