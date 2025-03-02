@@ -10,11 +10,11 @@ import { AuthContextType } from "../types/types.ts";
 export const AuthContext = createContext<AuthContextType | null>(null);
 
 const AuthProvider = ({children}:PropsWithChildren) => {
-  const user = localStorage.getItem("user")
+  const user = localStorage.getItem("user")!
   const [currentUser, setCurrentUser] = useState(
     user ? JSON.parse(user) : null
   );
-  console.log(currentUser)
+  // console.log(currentUser)
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
