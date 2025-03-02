@@ -1,20 +1,7 @@
 import { createContext, PropsWithChildren, useContext, useEffect, useState } from "react";
 import { EntriesContext } from "./EntriesContext";
-import { EntriesContextType } from "../types/types";
+import { Entrie, EntriesContextType, FiltersContextType, FiltersData } from "../types/types";
 
-export type FiltersContextType = {
-    submitFilters: any, 
-    setIsOpen: any, 
-    isOpen: any,
-    selectedFilters: {
-        entrieDatetime: string,
-        entrieType: string,
-        entrieClientName: string,
-    },
-    handleChange: any,
-    filtersData: any,
-    filteredArray: any
-}
 
 export const FiltersContext = createContext<FiltersContextType | "">("");
 
@@ -29,20 +16,20 @@ export const FiltersProvider = ({children}: PropsWithChildren) => {
         entrieClientName: "",
     });
     
-    const handleChange = (e:any) => {
+    const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setSelectedFilters({
             ...selectedFilters,
             [e.target.name]: e.target.value
         });
     }
     
-    const [filtersData, setFiltersData]: any = useState({
+    const [filtersData, setFiltersData] = useState<FiltersData>({
         entrieDatetimes: [] ,
         entrieTypes: [],
         entrieClientNames: [],
     });
 
-    const [filteredArray, setFilteredArray] = useState([]);
+    const [filteredArray, setFilteredArray] = useState<Array<Entrie>>([]);
          
     useEffect(()=>{
         const getFiltersData = () => {

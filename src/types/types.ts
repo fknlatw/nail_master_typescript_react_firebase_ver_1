@@ -12,7 +12,7 @@ export type AuthContextType = {
 }
 
 export type EntriesContextType = {
-  data: any,
+  data: Array<Entrie>,
   fetchData: () => void,
   setData: (data: any) => void,
   entries: any,
@@ -34,4 +34,35 @@ export type EntriesContextType = {
   searchText: any,
   setSearchText: any,
   handleAddEdit: any
+}
+
+export interface FiltersData{
+  entrieDatetimes: Array<any> ,
+  entrieTypes: Array<any>,
+  entrieClientNames: Array<any>,
+}
+
+export interface Entrie{
+  entrieDatetime: string,
+  entrieType: string,
+  entrieClientName: string,
+  entriePhone: string,
+  entrieId: string,
+  userId: string,
+}
+
+export interface SelectedFilters{
+  entrieDatetime: string,
+  entrieType: string,
+  entrieClientName: string
+}
+
+export type FiltersContextType = {
+  isOpen: boolean,
+  setIsOpen: (isOpen: boolean) => void, 
+  selectedFilters: SelectedFilters,
+  handleChange: (e: React.ChangeEvent<HTMLSelectElement>) => void,
+  filtersData: FiltersData,
+  filteredArray: Array<Entrie>,
+  submitFilters: (e: React.FormEvent<HTMLFormElement>) => void 
 }
