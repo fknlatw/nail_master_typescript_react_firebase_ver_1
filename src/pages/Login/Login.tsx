@@ -1,42 +1,14 @@
 import "./Login.scss";
-import {useContext, useState} from "react";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import {auth} from "../../firebase";
-import { useNavigate } from "react-router-dom";
+import {useContext} from "react";
 import { AuthContext } from "../../context/AuthContext";
-import { handleError } from "../../utils/handleError";
+import { AuthContextType } from "../../types/types";
+
+
 
 const Login = () => {
-  const [error, setError] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const {handleLogin, setEmail, email, 
+    error, password, setPassword} = useContext(AuthContext) as AuthContextType;
   
-  const {dispatch} = useContext(AuthContext);
-
-  const navigate = useNavigate();
-
-  
-
-  const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    if(email === "" || password === ""){
-      handleError("неверный логин или пароль", setError);
-      return;
-    }
-
-    signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        const user = userCredential.user;
-        dispatch({type: "LOGIN", payload: user});
-        navigate("/");
-      })
-      .catch((err) => {
-        const errorMessage = err.message;
-        handleError(errorMessage, setError);
-      });
-  }
-
   return (
     <div className="container login__container">
 
