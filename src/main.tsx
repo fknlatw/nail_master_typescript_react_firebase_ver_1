@@ -9,14 +9,14 @@ import { FiltersProvider } from "./context/FiltersContext.tsx";
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <AuthProvider>
-      <EntriesProvider>
-        <FiltersProvider>
-          <Router>
-            <App /> 
-          </Router>
-        </FiltersProvider>
-      </EntriesProvider>
-    </AuthProvider>
+    <Router>
+      <AuthProvider>
+        <EntriesProvider>
+          <FiltersProvider>
+              <App /> 
+          </FiltersProvider>
+        </EntriesProvider>
+      </AuthProvider>
+    </Router>
   </StrictMode>,
 )

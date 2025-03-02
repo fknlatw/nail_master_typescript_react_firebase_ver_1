@@ -1,5 +1,6 @@
 import { createContext, PropsWithChildren, useContext, useEffect, useState } from "react";
 import { AuthContext } from "./AuthContext";
+import { AuthContextType } from "../types/types";
 import { db } from "../firebase";
 import { collection, getDocs, query, where, doc, deleteDoc } from "firebase/firestore";
 
@@ -39,7 +40,7 @@ const EntriesProvider = ({children}: PropsWithChildren) => {
     const [type, setType] = useState("");
     const [clientName, setClientName] = useState("");
     const [phone, setPhone] = useState("");
-    const {currentUser} = useContext(AuthContext);
+    const {currentUser} = useContext(AuthContext) as AuthContextType;
 
     const deleteEntrie = async (id: string) => {
         console.log(id)

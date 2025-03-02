@@ -3,6 +3,7 @@ import Logo from "/images/logo.png";
 import { NavLink } from "react-router-dom";
 import React, {useContext, useState} from "react";
 import { AuthContext } from "../../context/AuthContext";
+import { AuthContextType } from "../../types/types";
 import { IoSearch } from "react-icons/io5";
 import { EntriesContext, EntriesContextType } from "../../context/EntriesContext";
 import { FiltersContext, FiltersContextType } from "../../context/FiltersContext";
@@ -12,27 +13,23 @@ import { RiFirebaseLine } from "react-icons/ri";
 import { TbBrandTypescript } from "react-icons/tb";
 
 const Header = () => {
-  const { currentUser, dispatch } = useContext(AuthContext);
+  const { currentUser, handleLogout} = useContext(AuthContext) as AuthContextType;
   const {entries, setEntries, data} = useContext(EntriesContext) as EntriesContextType;
   const {selectedfilters, filteredArray} = useContext(FiltersContext) as FiltersContextType;
   const [searchText, setSearchText] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const logOut = () => {
-    dispatch({type: "LOGOUT"})
-  }
+  
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     
     if(searchText === ""){
-      
       const {entrieDatetime, entrieType, entrieClientName} = selectedfilters;
       if(entrieDatetime === "" && entrieType === "" && entrieClientName === ""){
         setEntries(data);
         return;
       } else {
-        console.log(filteredArray)
         setEntries(filteredArray);
         return;
       }
@@ -79,7 +76,7 @@ const Header = () => {
             
             :<a 
               className="logout__button"
-              onClick={logOut}
+              onClick={handleLogout}
             >Выйти</a>}
           </li>
           
