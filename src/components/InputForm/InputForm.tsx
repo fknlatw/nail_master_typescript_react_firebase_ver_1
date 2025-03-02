@@ -1,72 +1,20 @@
 import "./InputForm.scss";
 import { useContext} from "react";
-import { addDoc, collection, Timestamp, updateDoc, doc } from "firebase/firestore";
-import { db } from "../../firebase";
-import { AuthContext } from "../../context/AuthContext";
-import { EntriesContext, EntriesContextType } from "../../context/EntriesContext";
-
-
+import { EntriesContext } from "../../context/EntriesContext";
+import { EntriesContextType } from "../../types/types";
 
 const InputForm = () => {
-    
-
-    const {currentUser
-    } = useContext(AuthContext);
-    const {fetchData, datetime, setDatetime,
-        type, setType, clientName,
-        setClientName, phone, setPhone, 
-        isEditing, setIsEditing} = useContext(EntriesContext) as EntriesContextType;
-
-
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        try {
-            if(isEditing.status === true){
-                const { userId, entrieId } = isEditing.currentEntrie;
-                
-                // console.log({
-                //     userId: userId,
-                //     entrieId: entrieId,
-                //     entrieDatetime: Timestamp.fromDate(new Date(datetime)),
-                //     entrieType: type,
-                //     entrieClientName: clientName,
-                //     entriePhone: phone,
-                // })
-                await updateDoc(doc(db, "entries", entrieId), {
-                    userId: userId,
-                    entrieId: entrieId,
-                    entrieDatetime: Timestamp.fromDate(new Date(datetime)),
-                    entrieType: type,
-                    entrieClientName: clientName,
-                    entriePhone: phone,
-                });
-            }else{
-                await addDoc(collection(db, "entries"), {
-                    entrieClientName: clientName,
-                    entrieDatetime: Timestamp.fromDate(new Date(datetime)),
-                    entriePhone: phone,
-                    entrieType: type,
-                    userId: currentUser.uid
-                });
-            }
-
-            fetchData();
-
-            setDatetime("");
-            setType("");
-            setClientName("");
-            setPhone("");
-            setIsEditing({currentEntrie: {}, status: false});
-
-        } catch (err) {
-            console.log(err);
-        }
-    }
+    const {
+        datetime, setDatetime, type, 
+        setType, clientName, setClientName, 
+        phone, setPhone, isEditing, 
+        handleAddEdit
+    } = useContext(EntriesContext) as EntriesContextType;
 
     return (
         <form 
             className="form" 
-            onSubmit={handleSubmit}
+            onSubmit={handleAddEdit}
             
         >
             <h2>Добавить запись</h2>
