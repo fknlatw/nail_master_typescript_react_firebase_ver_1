@@ -1,7 +1,8 @@
 import {useContext} from "react";
 import { MdFilterList } from 'react-icons/md';
 import "./FiltersForm.scss";
-import { FiltersContext, FiltersContextType } from "../../context/FiltersContext";
+import { FiltersContext } from "../../context/FiltersContext";
+import { FiltersContextType } from "../../types/types";
 
 
 const FiltersForm = () => {

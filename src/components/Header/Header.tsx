@@ -11,7 +11,8 @@ import { FaXmark } from "react-icons/fa6";
 import { FaReact } from "react-icons/fa";
 import { RiFirebaseLine } from "react-icons/ri";
 import { TbBrandTypescript } from "react-icons/tb";
-import { FiltersContext, FiltersContextType } from "../../context/FiltersContext";
+import { FiltersContext } from "../../context/FiltersContext";
+import { FiltersContextType } from "../../types/types";
 
 const Header = () => {
   const { currentUser, handleLogout} = useContext(AuthContext) as AuthContextType;
