@@ -1,55 +1,24 @@
 import "./Header.scss";
 import Logo from "/images/logo.png";
 import { NavLink } from "react-router-dom";
-import React, {useContext, useState} from "react";
+import {useContext, useState} from "react";
 import { AuthContext } from "../../context/AuthContext";
+import { AuthContextType } from "../../types/types";
 import { IoSearch } from "react-icons/io5";
-import { EntriesContext, EntriesContextType } from "../../context/EntriesContext";
-import { FiltersContext, FiltersContextType } from "../../context/FiltersContext";
+import { EntriesContext } from "../../context/EntriesContext";
+import { EntriesContextType } from "../../types/types";
 import { FaXmark } from "react-icons/fa6";
 import { FaReact } from "react-icons/fa";
 import { RiFirebaseLine } from "react-icons/ri";
 import { TbBrandTypescript } from "react-icons/tb";
+import { FiltersContext } from "../../context/FiltersContext";
+import { FiltersContextType } from "../../types/types";
 
 const Header = () => {
-  const { currentUser, dispatch } = useContext(AuthContext);
-  const {entries, setEntries, data} = useContext(EntriesContext) as EntriesContextType;
-  const {selectedfilters, filteredArray} = useContext(FiltersContext) as FiltersContextType;
-  const [searchText, setSearchText] = useState("");
+  const { currentUser, handleLogout} = useContext(AuthContext) as AuthContextType;
+  const { handleSearch, searchText, setSearchText } = useContext(EntriesContext) as EntriesContextType;
+  const {selectedFilters, filteredArray} = useContext(FiltersContext) as FiltersContextType;
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const logOut = () => {
-    dispatch({type: "LOGOUT"})
-  }
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    
-    if(searchText === ""){
-      
-      const {entrieDatetime, entrieType, entrieClientName} = selectedfilters;
-      if(entrieDatetime === "" && entrieType === "" && entrieClientName === ""){
-        setEntries(data);
-        return;
-      } else {
-        console.log(filteredArray)
-        setEntries(filteredArray);
-        return;
-      }
-    }
-
-    const searchResult = entries.filter((entrie:any)=>{
-      for(let i in entrie){
-        if(typeof(entrie[i]) === "string"){
-          if(entrie[i].toLowerCase().includes(searchText.toLowerCase())){
-            return true
-          };
-        }
-      }
-    });
-
-    setEntries(searchResult);
-  }
 
   return (
     <header className="header">
@@ -79,7 +48,7 @@ const Header = () => {
             
             :<a 
               className="logout__button"
-              onClick={logOut}
+              onClick={handleLogout}
             >Выйти</a>}
           </li>
           
@@ -104,7 +73,7 @@ const Header = () => {
               Приложение
             </NavLink>
           </li>
-          <form className="search__form" onSubmit={handleSubmit} >
+          <form className="search__form" onSubmit={(e)=>handleSearch(e, selectedFilters, filteredArray)} >
             <button 
               type="submit" 
               className="search__button"

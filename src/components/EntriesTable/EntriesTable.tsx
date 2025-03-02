@@ -1,6 +1,7 @@
 import "./EntriesTable.scss";
 import { useContext} from "react";
-import { EntriesContext, EntriesContextType } from "../../context/EntriesContext";
+import { EntriesContext } from "../../context/EntriesContext";
+import { EntriesContextType } from "../../types/types";
 import { FaTrash } from "react-icons/fa";
 import { MdEdit } from "react-icons/md";
 

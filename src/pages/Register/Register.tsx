@@ -1,48 +1,18 @@
-
 import "./Register.scss";
-import { useState } from "react";
-import { auth, db } from "../../firebase";
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { doc, setDoc } from "firebase/firestore";
-import { handleError } from "../../utils/handleError";
+import { useContext } from "react";
+import { AuthContext } from "../../context/AuthContext";
+import { AuthContextType } from "../../types/types";
 
 
 
 const Register = () => {
-
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
-  const [error, setError] = useState("");
-
- 
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    if(email === "" || password === ""){
-      handleError("Заполните все поля", setError);
-      return;
-    }
-    try {
-      const res = await createUserWithEmailAndPassword(auth, email, password);
-
-      await setDoc(doc(db, "users", res.user.uid), {
-        userEmail: email,
-        userPassword: password
-      });
-
-    } catch (err: any) {
-      const errorMessage = err.message;
-      handleError(errorMessage, setError);
-    }
-  }
-
+  const {error, email, password,
+    setEmail, setPassword, handleRegister} = useContext(AuthContext) as AuthContextType;
 
   return (
     <div className="container register__container">
       <form 
-        onSubmit={handleSubmit}
+        onSubmit={handleRegister}
         className="register__form"
       >
         <h2>Регистрация в базе</h2>

@@ -1,32 +1,89 @@
-import { createContext, PropsWithChildren, useEffect, useReducer } from "react";
-import AuthReducer from "./AuthReducer";
+import { createContext, PropsWithChildren, useEffect, useState } from "react";
+import { handleError } from "../utils/handleError";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import { auth, db } from "../firebase.ts";
+import { setDoc, doc } from "firebase/firestore";
+import { useNavigate } from "react-router-dom";
+import { AuthContextType } from "../types/types.ts";
 
-type initialState = {
-    currentUser: any,
-    dispatch: any
-}
-const INITIAL_STATE: initialState = {
-    currentUser: JSON.parse(localStorage.getItem("user")!) || null,
-    dispatch: ""
-}
 
-export const AuthContext = createContext(INITIAL_STATE);
+export const AuthContext = createContext<AuthContextType | null>(null);
 
 const AuthProvider = ({children}:PropsWithChildren) => {
-    const [state, dispatch] = useReducer(AuthReducer, INITIAL_STATE);
+  const user = localStorage.getItem("user")!
+  const [currentUser, setCurrentUser] = useState(
+    user ? JSON.parse(user) : null
+  );
+  // console.log(currentUser)
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
 
-    useEffect(()=>{
-        localStorage.setItem("user", JSON.stringify(state.currentUser));
-    }, [state.currentUser]);
+  const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    
+    if(email === "" || password === ""){
+      handleError("Заполните все поля", setError);
+      return;
+    }
+    try {
+      const res = await createUserWithEmailAndPassword(auth, email, password);
+    
+      await setDoc(doc(db, "users", res.user.uid), {
+        userEmail: email,
+        userPassword: password
+      });
+    
+    } catch (err: any) {
+      const errorMessage = err.message;
+      handleError(errorMessage, setError);
+    }
+  }
 
-    return (
-        <AuthContext.Provider value={{
-            currentUser: state.currentUser,
-            dispatch
-        }}>
-            {children}
-        </AuthContext.Provider>
-    )
+  const handleLogout = () => {
+    setCurrentUser(null);
+  }
+
+  const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if(email === "" || password === ""){
+      handleError("неверный логин или пароль", setError);
+      return;
+    }
+  
+    signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        const user = userCredential.user;
+        setCurrentUser(user);
+        navigate("/");
+    })
+      .catch((err) => {
+        const errorMessage = err.message;
+        handleError(errorMessage, setError);
+    });
+  }
+
+  useEffect(()=>{
+    localStorage.setItem("user", JSON.stringify(currentUser));
+  }, [currentUser]);
+
+  return (
+    <AuthContext.Provider value={{
+      currentUser,
+      error,
+      setError,
+      email,
+      setEmail,
+      password,
+      setPassword,
+      handleRegister,
+      handleLogin,
+      handleLogout
+    }}>
+        {children}
+    </AuthContext.Provider>
+  )
 }
 
 export default AuthProvider

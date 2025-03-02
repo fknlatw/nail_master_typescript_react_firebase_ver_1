@@ -1,15 +1,16 @@
 import {useContext} from "react";
 import { MdFilterList } from 'react-icons/md';
 import "./FiltersForm.scss";
-import { FiltersContext, FiltersContextType } from "../../context/FiltersContext";
+import { FiltersContext } from "../../context/FiltersContext";
+import { FiltersContextType } from "../../types/types";
 
 
 const FiltersForm = () => {
     const {
         submitFilters, setIsOpen, isOpen,
-        selectedfilters, handleChange, filtersData
+        selectedFilters, handleChange, filtersData
     } = useContext(FiltersContext) as FiltersContextType;
-
+    
     return (
         <form className="filters__form" onSubmit={submitFilters}>
             <div className="filters__header">
@@ -31,7 +32,7 @@ const FiltersForm = () => {
 
                 <select 
                     name="entrieDatetime"
-                    value={selectedfilters.entrieDatetime} 
+                    value={selectedFilters.entrieDatetime} 
                     onChange={handleChange}
                 >
                     <option value=""></option>
@@ -53,7 +54,7 @@ const FiltersForm = () => {
 
                 <select 
                     name="entrieType"
-                    value={selectedfilters.entrieType} 
+                    value={selectedFilters.entrieType} 
                     onChange={handleChange}
                 >
                     <option value=""></option>
@@ -76,7 +77,7 @@ const FiltersForm = () => {
 
                 <select 
                     name="entrieClientName"
-                    value={selectedfilters.entrieClientName}
+                    value={selectedFilters.entrieClientName}
                     onChange={handleChange}
                 >
                     <option value=""></option>

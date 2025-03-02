@@ -1,43 +1,35 @@
 import { createContext, PropsWithChildren, useContext, useEffect, useState } from "react";
-import { EntriesContext, EntriesContextType } from "./EntriesContext";
+import { EntriesContext } from "./EntriesContext";
+import { Entrie, EntriesContextType, FiltersContextType, FiltersData } from "../types/types";
 
-export type FiltersContextType = {
-    submitFilters: any, 
-    setIsOpen: any, 
-    isOpen: any,
-    selectedfilters: any,
-    handleChange: any,
-    filtersData: any,
-    filteredArray: any
-}
 
-export const FiltersContext = createContext<FiltersContextType | {}>({});
+export const FiltersContext = createContext<FiltersContextType | "">("");
 
 export const FiltersProvider = ({children}: PropsWithChildren) => {
     const [isOpen, setIsOpen] = useState(false);
 
     const {data, setEntries} = useContext(EntriesContext) as EntriesContextType;
 
-    const [selectedfilters, setSelectedFilters] = useState({
+    const [selectedFilters, setSelectedFilters] = useState({
         entrieDatetime: "",
         entrieType: "",
         entrieClientName: "",
     });
     
-    const handleChange = (e:any) => {
+    const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setSelectedFilters({
-            ...selectedfilters,
+            ...selectedFilters,
             [e.target.name]: e.target.value
-        })
+        });
     }
     
-    const [filtersData, setFiltersData]: any = useState({
+    const [filtersData, setFiltersData] = useState<FiltersData>({
         entrieDatetimes: [] ,
         entrieTypes: [],
         entrieClientNames: [],
     });
 
-    const [filteredArray, setFilteredArray] = useState([]);
+    const [filteredArray, setFilteredArray] = useState<Array<Entrie>>([]);
          
     useEffect(()=>{
         const getFiltersData = () => {
@@ -63,7 +55,7 @@ export const FiltersProvider = ({children}: PropsWithChildren) => {
     
     const submitFilters = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        const {entrieDatetime, entrieType, entrieClientName} = selectedfilters;
+        const {entrieDatetime, entrieType, entrieClientName} = selectedFilters;
     
         if(entrieDatetime === "" && entrieType === "" && entrieClientName === ""){
             setEntries(data);
@@ -108,7 +100,7 @@ export const FiltersProvider = ({children}: PropsWithChildren) => {
         submitFilters, 
         setIsOpen, 
         isOpen,
-        selectedfilters,
+        selectedFilters,
         handleChange,
         filtersData,
         filteredArray
