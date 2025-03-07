@@ -3,7 +3,7 @@ import {
   useEffect, useState 
 } from "react";
 import { AuthContext } from "./AuthContext";
-import { AuthContextType, Entrie, EntriesContextType } from "../types/types";
+import { AuthContextType, Entrie, EntriesContextType, SelectedFilters } from "../types/types";
 import { db } from "../firebase";
 import { 
   collection, getDocs, query, 
@@ -108,17 +108,17 @@ const EntriesProvider = ({children}: PropsWithChildren) => {
   }
 
   const fetchData = async () => {
-    let list: any = []
+    let list: Entrie[] = []
     if(!currentUser) return;
 
     try {
       const q = query(collection(db, "entries"), where("userId", "==", currentUser?.uid));
       const data = await getDocs(q);
       data.forEach((doc) => {
-        list.push({...doc.data(), entrieId: doc.id});
+        list.push({...doc.data(), entrieId: doc.id} as Entrie);
       }); 
             
-      list.sort((a:any, b:any) => new Date(b.entrieDatetime.seconds * 1000).getTime() - new Date(a.entrieDatetime.seconds * 1000).getTime())
+      list.sort((a: Entrie, b: Entrie) => new Date(b.entrieDatetime.seconds * 1000).getTime() - new Date(a.entrieDatetime.seconds * 1000).getTime())
             
       setData(list);
       setEntries(list);
@@ -130,8 +130,8 @@ const EntriesProvider = ({children}: PropsWithChildren) => {
     
   const handleSearch = (
     e: React.FormEvent<HTMLFormElement>, 
-    selectedFilters: any, 
-    filteredArray: any
+    selectedFilters: SelectedFilters, 
+    filteredArray: Array<Entrie>
   ) => {
     e.preventDefault();
         
@@ -146,7 +146,7 @@ const EntriesProvider = ({children}: PropsWithChildren) => {
       }
     }
     
-    const searchResult = entries.filter((entrie:any)=>{
+    const searchResult = entries.filter((entrie: Entrie)=>{
       for(let i in entrie){
         if(typeof(entrie[i]) === "string"){
           if(entrie[i].toLowerCase().includes(searchText.toLowerCase())){

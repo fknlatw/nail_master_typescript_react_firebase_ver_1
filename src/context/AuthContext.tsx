@@ -35,9 +35,11 @@ const AuthProvider = ({children}:PropsWithChildren) => {
         userPassword: password
       });
     
-    } catch (err: any) {
-      const errorMessage = err.message;
-      handleError(errorMessage, setError);
+    } catch (err: unknown) {
+      if(err instanceof Error){
+        const errorMessage = err.message;
+        handleError(errorMessage, setError);
+      }
     }
   }
 
