@@ -20,7 +20,16 @@ const EntriesProvider = ({children}: PropsWithChildren) => {
   const [data, setData] = useState<Entrie[]>([]);
   const [entries, setEntries] = useState<Entrie[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [datetime, setDatetime] = useState<string>("");
+
+  const [entrie, setEntrie] = useState({
+    userId: "",
+    entrieId: "",
+    entrieDatetime: "",
+    entrieType: "",
+    entrieClientName: "",
+    entriePhone: "",
+    entrieStatus: "В процессе"
+  });
   
   const [isEditing, setIsEditing] = useState({
     currentEntrie: {
@@ -33,13 +42,12 @@ const EntriesProvider = ({children}: PropsWithChildren) => {
       entrieType: "",
       entrieClientName: "",
       entriePhone: "",
+      entrieStatus: ""
     },
     status: false
   });
   const [searchText, setSearchText] = useState("");
-  const [type, setType] = useState("");
-  const [clientName, setClientName] = useState("");
-  const [phone, setPhone] = useState("");
+  
 
   const {currentUser} = useContext(AuthContext) as AuthContextType;
     
@@ -54,10 +62,15 @@ const EntriesProvider = ({children}: PropsWithChildren) => {
     date.setHours(date.getHours() + 6);
     const formattedDate = date.toISOString().slice(0, 16);
         
-    setDatetime(formattedDate);
-    setType(entrie.entrieType);
-    setClientName(entrie.entrieClientName);
-    setPhone(entrie.entriePhone);
+    setEntrie({
+      entrieDatetime: formattedDate,
+      entrieType: entrie.entrieType,
+      entrieClientName: entrie.entrieClientName,
+      entriePhone: entrie.entriePhone,
+      entrieStatus: entrie.entrieStatus,
+      entrieId: entrie.entrieId,
+      userId: entrie.userId,
+    })
     setIsEditing({ currentEntrie: entrie, status: true });
   }
 
@@ -69,27 +82,35 @@ const EntriesProvider = ({children}: PropsWithChildren) => {
         await updateDoc(doc(db, "entries", entrieId), {
           userId: userId,
           entrieId: entrieId,
-          entrieDatetime: Timestamp.fromDate(new Date(datetime)),
-          entrieType: type,
-          entrieClientName: clientName,
-          entriePhone: phone,
+          entrieDatetime: Timestamp.fromDate(new Date(entrie.entrieDatetime)),
+          entrieType: entrie.entrieType,
+          entrieClientName: entrie.entrieClientName,
+          entriePhone: entrie.entriePhone,
+          entrieStatus: entrie.entrieStatus
         });
       }else{
         await addDoc(collection(db, "entries"), {
-          entrieClientName: clientName,
-          entrieDatetime: Timestamp.fromDate(new Date(datetime)),
-          entriePhone: phone,
-          entrieType: type,
-          userId: currentUser.uid
+          entrieClientName: entrie.entrieClientName,
+          entrieDatetime: Timestamp.fromDate(new Date(entrie.entrieDatetime)),
+          entriePhone: entrie.entriePhone,
+          entrieType: entrie.entrieType,
+          userId: currentUser.uid,
+          entrieStatus: entrie.entrieStatus
         });
       }
 
       fetchData();
 
-      setDatetime("");
-      setType("");
-      setClientName("");
-      setPhone("");
+      setEntrie({
+        userId: "",
+        entrieId: "",
+        entrieDatetime: "",
+        entrieType: "",
+        entrieClientName: "",
+        entriePhone: "",
+        entrieStatus: "В процессе"
+      });
+      
       setIsEditing({currentEntrie: {
         userId: "",
         entrieId: "",
@@ -99,7 +120,8 @@ const EntriesProvider = ({children}: PropsWithChildren) => {
         },
         entrieType: "",
         entrieClientName: "",
-        entriePhone: ""
+        entriePhone: "",
+        entrieStatus: ""
       }, status: false});
 
     } catch (err) {
@@ -113,7 +135,9 @@ const EntriesProvider = ({children}: PropsWithChildren) => {
 
     try {
       const q = query(collection(db, "entries"), where("userId", "==", currentUser?.uid));
+
       const data = await getDocs(q);
+
       data.forEach((doc) => {
         list.push({...doc.data(), entrieId: doc.id} as Entrie);
       }); 
@@ -169,12 +193,9 @@ const EntriesProvider = ({children}: PropsWithChildren) => {
     <EntriesContext.Provider value={{
       data, fetchData, setData,
       entries, setEntries, isLoading,
-      deleteEntrie, editEntrie, datetime,
-      setDatetime, type, setType,
-      clientName, setClientName, phone, 
-      setPhone, isEditing, setIsEditing,
+      deleteEntrie, editEntrie, isEditing, setIsEditing,
       handleSearch, searchText, setSearchText,
-      handleAddEdit
+      handleAddEdit, entrie, setEntrie
     }}>
       {children}
     </EntriesContext.Provider>
