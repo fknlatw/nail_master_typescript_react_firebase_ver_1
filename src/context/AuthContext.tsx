@@ -74,8 +74,8 @@ const AuthProvider = ({children}:PropsWithChildren) => {
     <AuthContext.Provider value={{
       currentUser, error, setError,
       email, setEmail, password,
-      setPassword, handleRegister, handleLogin,
-      handleLogout
+      setPassword, handleRegister, 
+      handleLogin, handleLogout
     }}>
         {children}
     </AuthContext.Provider>
