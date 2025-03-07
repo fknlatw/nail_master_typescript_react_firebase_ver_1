@@ -33,11 +33,11 @@ export const FiltersProvider = ({children}: PropsWithChildren) => {
          
     useEffect(()=>{
         const getFiltersData = () => {
-            let dates: any = [];
-            let types: any= [];
-            let clientNames: any = [];
+            let dates: string[] = [];
+            let types: string[]= [];
+            let clientNames: string[] = [];
     
-            data.forEach((entrie: any)=>{
+            data.forEach((entrie: Entrie)=>{
                 dates.push(new Date(entrie.entrieDatetime.seconds * 1000).toLocaleDateString());
                 types.push(entrie.entrieType)
                 clientNames.push(entrie.entrieClientName);
@@ -62,7 +62,7 @@ export const FiltersProvider = ({children}: PropsWithChildren) => {
             return;
         }
     
-        const filteredArray =  data.filter((entrie: any) => {
+        const filteredArray =  data.filter((entrie: Entrie) => {
             const date = new Date(entrie.entrieDatetime.seconds * 1000).toLocaleDateString();
             //dumb code
             if(entrieDatetime !== "" 

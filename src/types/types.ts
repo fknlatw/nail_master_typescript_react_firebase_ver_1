@@ -16,7 +16,7 @@ export type AuthContextType = {
 export type EntriesContextType = {
   data: Entrie[],
   fetchData: () => void,
-  setData: (data: any) => void,
+  setData: (data: Entrie[]) => void,
   entries: Entrie[],
   setEntries: (data: Entrie[]) => void,
   isLoading: boolean,
@@ -48,12 +48,13 @@ export interface IsEditing{
 }
 
 export interface FiltersData{
-  entrieDatetimes: Array<any> ,
-  entrieTypes: Array<any>,
-  entrieClientNames: Array<any>,
+  entrieDatetimes: Array<string> ,
+  entrieTypes: Array<string>,
+  entrieClientNames: Array<string>,
 }
 
 export interface Entrie{
+  [key: string]: string | number | {},
   entrieDatetime: {
     seconds: number,
     nanoseconds: number

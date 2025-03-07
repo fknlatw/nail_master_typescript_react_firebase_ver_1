@@ -1,7 +1,7 @@
 import "./EntriesTable.scss";
 import { useContext} from "react";
 import { EntriesContext } from "../../context/EntriesContext";
-import { EntriesContextType } from "../../types/types";
+import { Entrie, EntriesContextType } from "../../types/types";
 import { FaTrash } from "react-icons/fa";
 import { MdEdit } from "react-icons/md";
 
@@ -30,7 +30,7 @@ const EntriesTable = () => {
             </tr>
         </thead>
         <tbody className="table__body">
-            {entries?.map((item: any) => {
+            {entries?.map((item: Entrie) => {
                 
                 return(
                     <tr key={item.entrieId} className="table__row">
