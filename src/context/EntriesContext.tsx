@@ -115,14 +115,10 @@ const EntriesProvider = ({children}: PropsWithChildren) => {
     try {
       const q = query(collection(db, "entries"), where("userId", "==", currentUser?.uid));
       const data = await getDocs(q);
-<<<<<<< Updated upstream
+      
       data.forEach((doc) => {
         list.push({...doc.data(), entrieId: doc.id} as Entrie);
       }); 
-=======
-
-      data.forEach((doc) => {list.push({...doc.data(), entrieId: doc.id} as Entrie);}); 
->>>>>>> Stashed changes
             
       list.sort((a: Entrie, b: Entrie) => new Date(b.entrieDatetime.seconds * 1000).getTime() - new Date(a.entrieDatetime.seconds * 1000).getTime())
             
