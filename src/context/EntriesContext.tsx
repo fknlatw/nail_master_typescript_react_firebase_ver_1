@@ -133,6 +133,7 @@ const EntriesProvider = ({children}: PropsWithChildren) => {
     let list: Entrie[] = []
     if(!currentUser) return;
 
+    setIsLoading(true);
     try {
       const q = query(collection(db, "entries"), where("userId", "==", currentUser?.uid));
 
