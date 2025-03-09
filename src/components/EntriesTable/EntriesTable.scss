@@ -33,10 +33,24 @@
             position: relative;
             overflow: hidden;
 
+            &.table__row--process{
+                .table__data{
+                    border-bottom: 1px solid red;
+                }
+            }
+            
+            &.table__row--success{
+                .table__data{
+                    border-bottom: 1px solid green;
+                }
+            }
+
             .table__data{
                 padding: 0.2rem;
                 border: 1.25px solid var(--graybrowncrimson-color);
-                border-bottom-color: var(--red-color);    
+                  
+
+                
                 .data__buttons{
                     display: flex;
                     justify-content: flex-end;
@@ -62,3 +76,4 @@
         }
     }
 }
+

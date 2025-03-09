@@ -7,4 +7,12 @@
     .form__label{
         font-style: italic;
     }
+    
+    select{
+        padding: 0.2rem;
+        outline: none;
+        border: 1px solid var(--moderate-orchid-color);
+        color: var(--dark-orchid-color);
+        background: transparent;
+    }
 }

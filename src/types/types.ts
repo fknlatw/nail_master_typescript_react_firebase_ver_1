@@ -22,14 +22,6 @@ export type EntriesContextType = {
   isLoading: boolean,
   deleteEntrie: (id: string) => void
   editEntrie: (entrie: Entrie) => void
-  datetime: string,
-  setDatetime: (datetime: string) => void,
-  type: string, 
-  setType: (type: string) => void,
-  clientName: string,
-  setClientName: (clientName: string) => void,
-  phone: string, 
-  setPhone: (phone: string) => void,
   isEditing: IsEditing,
   setIsEditing: (isEditing: IsEditing) => void,
   handleSearch: (
@@ -39,7 +31,9 @@ export type EntriesContextType = {
   ) => void,
   searchText: string,
   setSearchText: (searchText: string) => void,
-  handleAddEdit: (e: React.FormEvent<HTMLFormElement>) => void
+  handleAddEdit: (e: React.FormEvent<HTMLFormElement>) => void,
+  entrie: FormEntrie,
+  setEntrie: (entrie: FormEntrie) => void
 }
 
 export interface IsEditing{
@@ -64,6 +58,17 @@ export interface Entrie{
   entriePhone: string,
   entrieId: string,
   userId: string,
+  entrieStatus: string
+}
+
+export interface FormEntrie{
+  entrieDatetime: string,
+  entrieType: string,
+  entrieClientName: string,
+  entriePhone: string,
+  entrieId: string
+  userId: string,
+  entrieStatus: string
 }
 
 export interface SelectedFilters{

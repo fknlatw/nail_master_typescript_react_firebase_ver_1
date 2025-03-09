@@ -5,17 +5,21 @@ import { EntriesContextType } from "../../types/types";
 
 const InputForm = () => {
     const {
-        datetime, setDatetime, type, 
-        setType, clientName, setClientName, 
-        phone, setPhone, isEditing, 
-        handleAddEdit
+        isEditing, 
+        handleAddEdit, entrie, setEntrie
     } = useContext(EntriesContext) as EntriesContextType;
+
+    const handleChange = (e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) => {
+        setEntrie({
+            ...entrie,
+            [e.target.name]: e.target.value
+        });
+    }
 
     return (
         <form 
             className="form" 
             onSubmit={handleAddEdit}
-            
         >
             <h2>Добавить запись</h2>
             <label 
@@ -28,8 +32,8 @@ const InputForm = () => {
                 className="form__input"
                 name="entrieDatetime" 
                 type="datetime-local" 
-                value={datetime}
-                onChange={(e) => setDatetime(e.target.value)}
+                value={entrie.entrieDatetime}
+                onChange={handleChange}
             />
 
             <label 
@@ -42,8 +46,8 @@ const InputForm = () => {
                 className="form__input"
                 name="entrieType" 
                 type="text" 
-                value={type}
-                onChange={(e)=>setType(e.target.value)}
+                value={entrie.entrieType}
+                onChange={handleChange}
             />
 
             <label 
@@ -56,8 +60,8 @@ const InputForm = () => {
                 className="form__input"
                 name="entrieClientName" 
                 type="text"  
-                value={clientName}
-                onChange={(e)=>setClientName(e.target.value)}
+                value={entrie.entrieClientName}
+                onChange={handleChange}
             />
 
             <label 
@@ -70,9 +74,25 @@ const InputForm = () => {
                 className="form__input"
                 name="entriePhone" 
                 type="text" 
-                value={phone}
-                onChange={(e)=>setPhone(e.target.value)}
+                value={entrie.entriePhone}
+                onChange={handleChange}
             />
+
+            <label 
+                className="form__label" 
+                htmlFor="entrieStatus"
+            >Статус записи</label>
+
+            <select 
+                required
+                className="form__select"
+                name="entrieStatus" 
+                value={entrie.entrieStatus}
+                onChange={handleChange}
+            >
+                <option value="В процессе">В процессе</option>
+                <option value="Завершен">Завершен</option>
+            </select>
 
             <button 
                 className="form__button" 
