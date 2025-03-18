@@ -35,21 +35,22 @@
 
             &.table__row--process{
                 .table__data{
-                    border-bottom: 1px solid red;
+                    border-bottom: 1.25px solid red!important;
+                    box-shadow: 0 1px 3px 0 rgba(128, 0, 0, 0.672);
                 }
             }
             
             &.table__row--success{
                 .table__data{
-                    border-bottom: 1px solid green;
+                    box-shadow: 0 1px 3px 0 rgba(0, 128, 0, 0.672);
+                    border-bottom: 1.25px solid green!important;
                 }
             }
 
             .table__data{
                 padding: 0.2rem;
                 border: 1.25px solid var(--graybrowncrimson-color);
-                  
-
+                
                 
                 .data__buttons{
                     display: flex;

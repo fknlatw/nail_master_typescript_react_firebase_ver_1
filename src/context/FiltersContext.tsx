@@ -1,19 +1,30 @@
-import { createContext, PropsWithChildren, useContext, useEffect, useState } from "react";
+import { 
+    createContext, PropsWithChildren, useContext, 
+    useEffect, useState 
+} from "react"
+
 import { EntriesContext } from "./EntriesContext";
-import { Entrie, EntriesContextType, FiltersContextType, FiltersData } from "../types/types";
+import { 
+    Entrie, EntriesContextType, FiltersContextType, 
+    FiltersData, SelectedFilters
+} from "../types/types";
+
+import { formatDateToString } from "../utils/dateFormatting";
+import { selectedFiltersDelaultValue } from "../constants/constants";
 
 
 export const FiltersContext = createContext<FiltersContextType | "">("");
 
 export const FiltersProvider = ({children}: PropsWithChildren) => {
-    const [isOpen, setIsOpen] = useState(false);
+    const [isOpen, setIsOpen] = useState<boolean>(false);
 
     const {data, setEntries} = useContext(EntriesContext) as EntriesContextType;
 
-    const [selectedFilters, setSelectedFilters] = useState({
+    const [selectedFilters, setSelectedFilters] = useState<SelectedFilters>({
         entrieDatetime: "",
         entrieType: "",
         entrieClientName: "",
+        entrieStatus: ""
     });
     
     const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -27,73 +38,75 @@ export const FiltersProvider = ({children}: PropsWithChildren) => {
         entrieDatetimes: [] ,
         entrieTypes: [],
         entrieClientNames: [],
+        entrieStatuses: []
     });
 
-    const [filteredArray, setFilteredArray] = useState<Array<Entrie>>([]);
+    const [filteredArray, setFilteredArray] = useState<Entrie []>([]);
+
+    const getFiltersData = (array: any) => {
+        let dates: string[] = [];
+        let types: string[]= [];
+        let clientNames: string[] = [];
+        let statuses: string[] = [] 
+
+        array.forEach((entrie: Entrie)=>{
+            dates.push(formatDateToString(entrie.entrieDatetime.seconds));
+            types.push(entrie.entrieType)
+            clientNames.push(entrie.entrieClientName);
+            statuses.push(entrie.entrieStatus)
+        });
+
+        return {
+            entrieDatetimes: Array.from(new Set(dates)),
+            entrieTypes: Array.from(new Set(types)),
+            entrieClientNames: Array.from(new Set(clientNames)),
+            entrieStatuses: Array.from(new Set(statuses)),
+        }
+    }
          
     useEffect(()=>{
-        const getFiltersData = () => {
-            let dates: string[] = [];
-            let types: string[]= [];
-            let clientNames: string[] = [];
-    
-            data.forEach((entrie: Entrie)=>{
-                dates.push(new Date(entrie.entrieDatetime.seconds * 1000).toLocaleDateString());
-                types.push(entrie.entrieType)
-                clientNames.push(entrie.entrieClientName);
-            });
-    
-            return {
-                entrieDatetimes: Array.from(new Set(dates)),
-                entrieTypes: Array.from(new Set(types)),
-                entrieClientNames: Array.from(new Set(clientNames))
-            }
-        }
-    
-        setFiltersData(getFiltersData());
+        setFiltersData(getFiltersData(data));
     }, [data]);
+
+    const resetFilters = () => {
+        if(selectedFilters === selectedFiltersDelaultValue) return;
+        setSelectedFilters(selectedFiltersDelaultValue as SelectedFilters);
+    }
     
     const submitFilters = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        const {entrieDatetime, entrieType, entrieClientName} = selectedFilters;
-    
-        if(entrieDatetime === "" && entrieType === "" && entrieClientName === ""){
+        const {entrieDatetime, entrieType, entrieClientName, entrieStatus} = selectedFilters;
+
+        let filteredArray: any = data;
+
+        if(!entrieDatetime && !entrieType && !entrieClientName && !entrieStatus){
             setEntries(data);
+            setFiltersData(getFiltersData(data));
             return;
         }
     
-        const filteredArray =  data.filter((entrie: Entrie) => {
-            const date = new Date(entrie.entrieDatetime.seconds * 1000).toLocaleDateString();
-            //dumb code
-            if(entrieDatetime !== "" 
-            && entrieType !== "" 
-            && entrieClientName !== ""){
-                if(date === entrieDatetime 
-                && entrieType === entrie.entrieType 
-                && entrieClientName === entrie.entrieClientName) return true;
-            }else if (entrieDatetime !== ""
-            && entrieType !== ""){
-                if(date === entrieDatetime 
-                && entrieType === entrie.entrieType) return true;
-            }else if(entrieDatetime !== ""
-            && entrieClientName !== ""){
-                if(date === entrieDatetime 
-                && entrieClientName === entrie.entrieClientName) return true;
-            }else if(entrieClientName !== ""
-            && entrieType !== ""){
-                if(entrie.entrieClientName === entrieClientName 
-                && entrie.entrieType === entrieType) return true;
-            }else if(entrieDatetime){
-                    if(date === entrieDatetime) return true;
-            }else if(entrieType){
-                if(entrieType === entrie.entrieType) return true;
-            }else if(entrieClientName){
-                if(entrieClientName === entrie.entrieClientName) return true;
-            }
-        });
-    
+        if(entrieDatetime){
+            filteredArray = filteredArray.filter((item: any) => 
+                entrieDatetime === formatDateToString(item.entrieDatetime.seconds
+            ));
+        }
+        if(entrieType){
+            filteredArray = filteredArray.filter((item: any) => 
+                item.entrieType === entrieType
+            );
+        }
+        if(entrieClientName){
+            filteredArray = filteredArray.filter((item: any) => 
+                item.entrieClientName === entrieClientName
+            );
+        }
+        if(entrieStatus){
+            filteredArray = filteredArray.filter((item: any) => item.entrieStatus === entrieStatus)
+        }
+
         setEntries(filteredArray);
         setFilteredArray(filteredArray);
+        setFiltersData(getFiltersData(filteredArray));
     }
 
     return <FiltersContext.Provider value={{
@@ -103,7 +116,8 @@ export const FiltersProvider = ({children}: PropsWithChildren) => {
         selectedFilters,
         handleChange,
         filtersData,
-        filteredArray
+        filteredArray,
+        resetFilters
     }}>
         {children}
     </FiltersContext.Provider>

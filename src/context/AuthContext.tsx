@@ -34,6 +34,9 @@ const AuthProvider = ({children}:PropsWithChildren) => {
         userEmail: email,
         userPassword: password
       });
+
+      setEmail(""),
+      setPassword("")
     
     } catch (err: unknown) {
       if(err instanceof Error){
@@ -58,6 +61,8 @@ const AuthProvider = ({children}:PropsWithChildren) => {
       .then((userCredential) => {
         const user = userCredential.user;
         setCurrentUser(user);
+        setEmail("")
+        setPassword("")
         navigate("/");
     })
       .catch((err) => {
