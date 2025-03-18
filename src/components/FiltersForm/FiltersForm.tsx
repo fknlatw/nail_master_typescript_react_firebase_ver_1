@@ -8,7 +8,8 @@ import { FiltersContextType } from "../../types/types";
 const FiltersForm = () => {
     const {
         submitFilters, setIsOpen, isOpen,
-        selectedFilters, handleChange, filtersData
+        selectedFilters, handleChange, filtersData,
+        resetFilters
     } = useContext(FiltersContext) as FiltersContextType;
     
     return (
@@ -95,8 +96,32 @@ const FiltersForm = () => {
                     }
                 </select>
 
+                <label htmlFor="entrieStatus">Статус</label>
+
+                <select 
+                    name="entrieStatus"
+                    value={selectedFilters.entrieStatus}
+                    onChange={handleChange}
+                >
+                    <option value=""></option>
+                    {
+                        filtersData.entrieStatuses.map((status: string, index: any) => {
+                            return <option
+                                value={status}
+                                key={index}
+                            >
+                                {status}
+                            </option>
+                        })
+                    }
+                </select>
+
                 <button type="submit">
                     Применить
+                </button>
+
+                <button onClick={resetFilters}> 
+                    Сбросить
                 </button>
 
             </div>}

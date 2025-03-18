@@ -63,9 +63,8 @@
             right: 0;
             left: 0;
             background-color: var(--white-color);
-            padding: 1rem 2rem 1rem 1rem;
             z-index: 2;
-
+            
 
             .banner__toggle__button{
                 position: absolute;
@@ -80,11 +79,17 @@
                 max-width: 900px;
                 width: 100%;
                 display: grid;
-                grid-template-columns: 1fr 1fr 1fr;
-                place-content: center;
+                grid-template-columns: 1fr;
+                padding: 1rem 2rem 1rem 1rem;
                 gap: 1rem;
                 overflow-y: auto;
-                height: calc(100vh - 2rem);
+                max-height: 100vh;
+                ul{
+                    list-style: none;
+                    li{
+
+                    }
+                }
             }
         }
     }

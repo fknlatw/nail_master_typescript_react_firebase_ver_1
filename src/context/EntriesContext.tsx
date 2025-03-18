@@ -3,14 +3,16 @@ import {
   useEffect, useState 
 } from "react";
 import { AuthContext } from "./AuthContext";
-import { AuthContextType, Entrie, EntriesContextType, SelectedFilters } from "../types/types";
+import { AuthContextType, Entrie, EntriesContextType, 
+  SelectedFilters } from "../types/types";
 import { db } from "../firebase";
 import { 
   collection, getDocs, query, 
-  where, doc, deleteDoc, 
-  updateDoc, Timestamp, 
-  addDoc 
+  where, Timestamp 
 } from "firebase/firestore";
+import { formatDateToInputValue } from "../utils/dateFormatting";
+import { firebaseAddDoc, firebaseDeleteDoc, firebaseUpdateDoc } from "../utils/firebaseDocCRUD";
+import { entrieDefaultValue, isEditingDefaultValue } from "../constants/constants";
 
 
 
@@ -19,48 +21,22 @@ export const EntriesContext = createContext<EntriesContextType | null>(null);
 const EntriesProvider = ({children}: PropsWithChildren) => {
   const [data, setData] = useState<Entrie[]>([]);
   const [entries, setEntries] = useState<Entrie[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-
-  const [entrie, setEntrie] = useState({
-    userId: "",
-    entrieId: "",
-    entrieDatetime: "",
-    entrieType: "",
-    entrieClientName: "",
-    entriePhone: "",
-    entrieStatus: "В процессе"
-  });
-  
-  const [isEditing, setIsEditing] = useState({
-    currentEntrie: {
-      userId: "",
-      entrieId: "",
-      entrieDatetime: {
-        seconds: 0,
-        nanoseconds: 0
-      },
-      entrieType: "",
-      entrieClientName: "",
-      entriePhone: "",
-      entrieStatus: ""
-    },
-    status: false
-  });
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [entrie, setEntrie] = useState(entrieDefaultValue);
+  const [isEditing, setIsEditing] = useState(isEditingDefaultValue);
   const [searchText, setSearchText] = useState("");
   
-
   const {currentUser} = useContext(AuthContext) as AuthContextType;
     
     
   const deleteEntrie = async (id: string) => {
-    await deleteDoc(doc(db, "entries", id));
+    firebaseDeleteDoc(id);
+
     fetchData();
   }
 
   const editEntrie = (entrie: Entrie) => {
-    const date = new Date(entrie.entrieDatetime.seconds * 1000);
-    date.setHours(date.getHours() + 6);
-    const formattedDate = date.toISOString().slice(0, 16);
+    const formattedDate = formatDateToInputValue(entrie.entrieDatetime.seconds);
         
     setEntrie({
       entrieDatetime: formattedDate,
@@ -70,7 +46,7 @@ const EntriesProvider = ({children}: PropsWithChildren) => {
       entrieStatus: entrie.entrieStatus,
       entrieId: entrie.entrieId,
       userId: entrie.userId,
-    })
+    });
     setIsEditing({ currentEntrie: entrie, status: true });
   }
 
@@ -79,7 +55,7 @@ const EntriesProvider = ({children}: PropsWithChildren) => {
     try {
       if(isEditing.status === true){
         const { userId, entrieId } = isEditing.currentEntrie;
-        await updateDoc(doc(db, "entries", entrieId), {
+        firebaseUpdateDoc(entrieId, {
           userId: userId,
           entrieId: entrieId,
           entrieDatetime: Timestamp.fromDate(new Date(entrie.entrieDatetime)),
@@ -89,7 +65,7 @@ const EntriesProvider = ({children}: PropsWithChildren) => {
           entrieStatus: entrie.entrieStatus
         });
       }else{
-        await addDoc(collection(db, "entries"), {
+        firebaseAddDoc({
           entrieClientName: entrie.entrieClientName,
           entrieDatetime: Timestamp.fromDate(new Date(entrie.entrieDatetime)),
           entriePhone: entrie.entriePhone,
@@ -98,32 +74,10 @@ const EntriesProvider = ({children}: PropsWithChildren) => {
           entrieStatus: entrie.entrieStatus
         });
       }
-
-      fetchData();
-
-      setEntrie({
-        userId: "",
-        entrieId: "",
-        entrieDatetime: "",
-        entrieType: "",
-        entrieClientName: "",
-        entriePhone: "",
-        entrieStatus: "В процессе"
-      });
       
-      setIsEditing({currentEntrie: {
-        userId: "",
-        entrieId: "",
-        entrieDatetime: {
-          seconds: 0,
-          nanoseconds: 0
-        },
-        entrieType: "",
-        entrieClientName: "",
-        entriePhone: "",
-        entrieStatus: ""
-      }, status: false});
-
+      fetchData();
+      setEntrie(entrieDefaultValue);
+      setIsEditing(isEditingDefaultValue);
     } catch (err) {
       console.log(err);
     }
@@ -136,10 +90,11 @@ const EntriesProvider = ({children}: PropsWithChildren) => {
     setIsLoading(true);
     try {
       const q = query(collection(db, "entries"), where("userId", "==", currentUser?.uid));
-
+      // const data = firebaseGetDoc(q);
       const data = await getDocs(q);
+      
 
-      data.forEach((doc) => {
+      data.forEach((doc: any) => {
         list.push({...doc.data(), entrieId: doc.id} as Entrie);
       }); 
             

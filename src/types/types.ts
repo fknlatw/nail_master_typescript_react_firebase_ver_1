@@ -45,6 +45,7 @@ export interface FiltersData{
   entrieDatetimes: Array<string> ,
   entrieTypes: Array<string>,
   entrieClientNames: Array<string>,
+  entrieStatuses: Array<string>
 }
 
 export interface Entrie{
@@ -74,7 +75,8 @@ export interface FormEntrie{
 export interface SelectedFilters{
   entrieDatetime: string,
   entrieType: string,
-  entrieClientName: string
+  entrieClientName: string,
+  entrieStatus: string
 }
 
 export type FiltersContextType = {
@@ -84,5 +86,6 @@ export type FiltersContextType = {
   handleChange: (e: React.ChangeEvent<HTMLSelectElement>) => void,
   filtersData: FiltersData,
   filteredArray: Array<Entrie>,
-  submitFilters: (e: React.FormEvent<HTMLFormElement>) => void 
+  submitFilters: (e: React.FormEvent<HTMLFormElement>) => void,
+  resetFilters: () => void
 }

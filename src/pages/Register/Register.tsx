@@ -20,14 +20,14 @@ const Register = () => {
 
         <input 
           name="userEmail" 
-          type="text" 
+          type="email" 
           value={email}
           onChange={(e)=>setEmail(e.target.value)}
         />
         <label htmlFor="userPassword">Пароль</label>
 
         <input 
-          type="text" 
+          type="password" 
           name="userPassword" 
           value={password}
           onChange={(e)=>setPassword(e.target.value)}
